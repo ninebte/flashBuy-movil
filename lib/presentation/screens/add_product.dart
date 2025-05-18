@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/presentation/widgets/navigation_bar.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
@@ -8,9 +9,9 @@ class AddProductScreen extends StatefulWidget {
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
 }
-
 class _AddProductScreenState extends State<AddProductScreen> {
   String barcode = '';
+  final dio = Dio();
   Future<void> openCamera() async {
     String? res = await SimpleBarcodeScanner.scanBarcode(
       context,
@@ -28,10 +29,32 @@ class _AddProductScreenState extends State<AddProductScreen> {
       setState(() {
         barcode = res;
       });
-    } else {
-      setState(() {
-        barcode = 'Error al escanear el código de barras';
-      });
+    }
+    encontrarProducto();
+  }
+
+  void mensaje(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  Future<void> encontrarProducto() async{
+    try {
+      if (barcode.isEmpty){
+        mensaje("Codigo invalido");
+        return;
+      }
+      final response = await dio.get("http://192.168.1.77:4000/producto/$barcode");
+      print(response);
+      if (response.data["status"] == 200) {
+        print("Producto agregado");
+        mensaje("se encontro");
+      } else {
+        print("Error al agregar producto");
+      }
+    } catch (e) {
+      print(" Error al agregar producto: $e");
     }
   }
 

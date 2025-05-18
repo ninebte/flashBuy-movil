@@ -9,7 +9,7 @@ class CustomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      //height: 80,
       decoration: BoxDecoration(
         color: Color(0xFF3498DB),
       ),

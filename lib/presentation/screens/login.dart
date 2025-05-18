@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:untitled/presentation/screens/home.dart';
 import 'package:untitled/presentation/screens/register.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,30 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final dio = Dio();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController contrasena = TextEditingController();
+  Future<void> loginUser(context) async {
+    try {
+      final response = await dio.post("http://192.168.1.77:4000/cliente/login", data: {
+        "email": email.text,
+        "contrasena": contrasena.text
+      });
+      print(response);
+      if (response.data["status"] == 200) {
+        print("Usuario inicio sesion con éxito");
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ));
+      } else {
+        print("Error al iniciar sesion el usuario");
+      }
+    } catch (e) {
+      print(" Error al iniciar sesion el usuario: $e");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             TextField(
+              controller: email,
               decoration: InputDecoration(
                 labelText: 'Email',
                 prefixIcon: const Icon(Icons.email),
@@ -64,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: contrasena,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.lock),
                 contentPadding:
@@ -90,11 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    /*Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const HomeScreen(),
-                        ));
+                        ));*/
+                    loginUser(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF3498DB),
