@@ -33,6 +33,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     encontrarProducto();
   }
 
+  //Mostar producto y agregar carrito
+
   void mensaje(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
@@ -49,7 +51,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       print(response);
       if (response.data["status"] == 200) {
         print("Producto agregado");
-        mensaje("se encontro");
+        mensaje("se encontro el producto");
       } else {
         print("Error al agregar producto");
       }

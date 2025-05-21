@@ -9,6 +9,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
+  //funcion busque cliente id y llame buscar carrito producto, boton pagar
   @override
   Widget build(BuildContext context) {
     return Scaffold(
